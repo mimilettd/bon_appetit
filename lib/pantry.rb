@@ -21,13 +21,17 @@ class Pantry
   end
 
   def convert_units(recipe)
+    converted_units = Hash.new
     recipe.ingredients.each do |key, value|
       if value > 100
-        recipe.ingredients[key] = value / 100
+        converted_units[key] = Hash.new.merge({quantity: value / 100, units: "Centi-Units"})
       elsif value < 1
-        recipe.ingredients[key] = (value * 1000).to_i
+        converted_units[key] = Hash.new.merge({quantity: (value * 1000).to_i, units: "Milli-Units"})
+      else
+        converted_units[key] = Hash.new.merge({quantity: value, units: "Universal Units"})
       end
     end
+    converted_units
   end
 
 end

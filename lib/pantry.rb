@@ -1,6 +1,7 @@
 class Pantry
   attr_reader :stock,
-              :cookbook
+              :cookbook,
+              :meals
   def initialize
     @stock = {}
     @cookbook = []
@@ -41,15 +42,40 @@ class Pantry
   end
 
   def what_can_i_make
-    tonights_dessert = []
+    @meals = []
     cookbook.each do |recipe|
       recipe.ingredients.each do |item, quantity|
         if stock.include?(item) && stock[item] > quantity
-          tonights_dessert << recipe.name
+          meals << recipe.name
         end
       end
     end
-    tonights_dessert.uniq
+    meals.uniq!
+  end
+
+  def how_many_can_i_make
+    overall_quantity = Hash.new
+    cookbook.map do |recipe|
+      stock.each do |item|
+        item_name = item[0]
+        if recipe.ingredients.include?(item_name)
+          overall_quantity[item_name] = stock[item_name] / recipe.ingredients[item_name]
+        end
+      end
+    end
+    meal(overall_quantity)
+  end
+
+  def meal(overall_quantity)
+    meal_quantity = Hash.new
+    overall_quantity.map do |key, value|
+      cookbook.map do |recipe|
+        if recipe.ingredients.has_key?(key) && meals.include?(recipe.name)
+          meal_quantity[recipe.name] = value
+        end
+      end
+    end
+    meal_quantity
   end
 
 end

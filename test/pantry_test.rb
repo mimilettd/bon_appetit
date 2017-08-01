@@ -99,7 +99,7 @@ class PantryTest < Minitest::Test
     pantry.restock("Salt", 20)
 
     expected = {"Brine Shot" => 4, "Peanuts" => 2}
-
+    pantry.what_can_i_make
     assert_equal expected, pantry.how_many_can_i_make
   end
 

@@ -1,7 +1,9 @@
 class Pantry
-  attr_reader :stock
+  attr_reader :stock,
+              :cookbook
   def initialize
     @stock = {}
+    @cookbook = []
   end
 
   def stock_check(item)
@@ -32,6 +34,22 @@ class Pantry
       end
     end
     converted_units
+  end
+
+  def add_to_cookbook(recipe)
+    cookbook << recipe
+  end
+
+  def what_can_i_make
+    tonights_dessert = []
+    cookbook.each do |recipe|
+      recipe.ingredients.each do |item, quantity|
+        if stock.include?(item) && stock[item] > quantity
+          tonights_dessert << recipe.name
+        end
+      end
+    end
+    tonights_dessert.uniq
   end
 
 end

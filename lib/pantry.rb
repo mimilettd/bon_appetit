@@ -19,4 +19,15 @@ class Pantry
       stock.merge!(item => quantity)
     end
   end
+
+  def convert_units(recipe)
+    recipe.ingredients.each do |key, value|
+      if value > 100
+        recipe.ingredients[key] = value / 100
+      elsif value < 1
+        recipe.ingredients[key] = (value * 1000).to_i
+      end
+    end
+  end
+
 end
